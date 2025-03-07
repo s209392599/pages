@@ -3,31 +3,17 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
-  >
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
   <!-- 使用 http-equiv 设置 Cache-Control -->
-  <meta
-    http-equiv="Cache-Control"
-    content="no-cache, no-store, must-revalidate"
-  >
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <!-- 使用Pragma禁止页面缓存 -->
-  <meta
-    http-equiv="Pragma"
-    content="no-cache"
-  >
+  <meta http-equiv="Pragma" content="no-cache">
   <!-- 设置缓存时间为0 -->
-  <meta
-    http-equiv="Cache-Control"
-    content="max-age=0"
-  >
+  <meta http-equiv="Cache-Control" content="max-age=0">
   <!-- 设置expires过期时间为过去的时间 -->
-  <meta
-    http-equiv="expires"
-    content="Wed, 21 Oct 2021 07:28:00 GMT"
-  >
+  <meta http-equiv="expires" content="Wed, 21 Oct 2021 07:28:00 GMT">
   <title>倒计时</title>
   <style>
     * {
@@ -60,69 +46,20 @@
 
 <body>
   <div class="item-box">
-    <div
-      class="item-title"
-      id="item_1"
-    >房贷:<span
-        id="num_1"
-        class="time-num"
-      ></span>天</div>
-    <div
-      class="item-title"
-      id="item_3"
-    ></div>
+    <div class="item-title" id="item_1">房贷:<span id="num_1" class="time-num"></span>天</div>
+    <div class="item-title" id="item_3"></div>
     <br />
 
-    <div
-      class="item-title"
-      id="item_2"
-    >车贷:<span
-        id="num_2"
-        class="time-num"
-      ></span>天</div>
-    <div
-      class="item-title"
-      id="item_4"
-    ></div>
+    <div class="item-title" id="item_5">春节:<span id="num_5" class="time-num"></span>天</div>
+    <div class="item-title" id="item_6"></div>
     <br />
 
-    <div
-      class="item-title"
-      id="item_5"
-    >春节:<span
-        id="num_5"
-        class="time-num"
-      ></span>天</div>
-    <div
-      class="item-title"
-      id="item_6"
-    ></div>
+    <div class="item-title" id="item_7">退休:<span id="days_7" class="time-num"></span>天</div>
+    <div class="item-title" id="time_7"></div>
     <br />
 
-    <div
-      class="item-title"
-      id="item_7"
-    >退休:<span
-        id="days_7"
-        class="time-num"
-      ></span>天</div>
-    <div
-      class="item-title"
-      id="time_7"
-    ></div>
-    <br />
-
-    <div
-      class="item-title"
-      id="item_8"
-    >合同:<span
-        id="days_8"
-        class="time-num"
-      ></span>天</div>
-    <div
-      class="item-title"
-      id="time_8"
-    ></div>
+    <div class="item-title" id="item_8">合同:<span id="days_8" class="time-num"></span>天</div>
+    <div class="item-title" id="time_8"></div>
     <br />
   </div>
 
@@ -186,8 +123,7 @@
       document.getElementById(el_2).innerHTML = formatDuration(d1, time);
     }
     fillNum('2031-04-01T00:00:00', 'item_1', 'num_1', 'item_3');
-    fillNum('2024-12-01T00:00:00', 'item_2', 'num_2', 'item_4');
-    fillNum('2025-01-29T00:00:00', 'item_5', 'num_5', 'item_6');// 春节
+    fillNum('2026-02-17T00:00:00', 'item_5', 'num_5', 'item_6');// 春节
     // https://daojishi.fun/  63岁 2055年5月底退休
     fillNum('2055-06-01T00:00:00', 'item_7', 'days_7', 'time_7');// 退休
     fillNum('2025-08-15T00:00:00', 'item_8', 'days_8', 'time_8');// 择仕合同倒计时
