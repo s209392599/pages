@@ -46,6 +46,9 @@
 
 <body>
   <div class="item-box">
+    <div class="item-title"><span id="curTime" class="time-num"></span></div>
+    <br />
+
     <div class="item-title" id="item_1">房贷:<span id="num_1" class="time-num"></span>天</div>
     <div class="item-title" id="item_3"></div>
     <br />
@@ -122,6 +125,18 @@
       document.getElementById(numId).innerHTML = diff.toFixed(2);
       document.getElementById(el_2).innerHTML = formatDuration(d1, time);
     }
+
+    // 获取当前时间 年月日时分秒
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const second = now.getSeconds();
+    const formattedTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    document.getElementById('curTime').innerHTML = formattedTime;
+
     fillNum('2031-04-01T00:00:00', 'item_1', 'num_1', 'item_3');
     fillNum('2026-02-17T00:00:00', 'item_5', 'num_5', 'item_6');// 春节
     // https://daojishi.fun/  63岁 2055年5月底退休
