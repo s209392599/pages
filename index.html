@@ -21,52 +21,48 @@
       padding: 0;
     }
 
-    .item-box {
-      position: absolute;
-      width: 100%;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
+    #countdown-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      min-height: 100vh;
+      overflow: auto;
     }
 
     .item-title {
-      /* margin: 20px auto; */
-      margin: 10px auto;
-      /* font-size: 35px; */
-      font-size: 30px;
+      margin: 5px auto;
+      font-size: 20px;
       text-align: center;
     }
 
     .time-num {
       color: #cd3285;
     }
+
+    .countdown-item {
+      width: 90%;
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+    }
   </style>
 </head>
 
 <body>
-  <div class="item-box">
-    <div class="item-title"><span id="curTime" class="time-num"></span></div>
-    <br />
-
-    <div class="item-title" id="item_1">房贷:<span id="num_1" class="time-num"></span>天</div>
-    <div class="item-title" id="item_3"></div>
-    <br />
-
-    <div class="item-title" id="item_5">春节:<span id="num_5" class="time-num"></span>天</div>
-    <div class="item-title" id="item_6"></div>
-    <br />
-
-    <div class="item-title" id="item_7">退休:<span id="days_7" class="time-num"></span>天</div>
-    <div class="item-title" id="time_7"></div>
-    <br />
-
-    <div class="item-title" id="item_8">合同:<span id="days_8" class="time-num"></span>天</div>
-    <div class="item-title" id="time_8"></div>
-    <br />
-  </div>
+  <div id="countdown-container"></div>
 
   <script>
+    // 定义倒计时事件数据
+    const countdownEvents = [
+      { time: '2031-04-01 00:00:00', desc: '房贷' },
+      { time: '2026-02-17 00:00:00', desc: '春节' },
+      { time: '2055-06-01 00:00:00', desc: '退休' },
+      { time: '2026-08-15 00:00:00', desc: '合同' }
+    ];
+
     function convertMilliseconds(time1, time2) {
       // 将时间字符串转换为Date对象
       const date1 = new Date(time1);
@@ -116,33 +112,80 @@
       return duration;
     }
 
-    function fillNum(time, elId, numId, el_2) {
+    // 动态创建倒计时项的函数
+    function createCountdownItem(event) {
       const d1 = new Date();
-      const d2 = new Date(time);
+      const d2 = new Date(event.time);
 
       const msPerDay = 1000 * 60 * 60 * 24;
       const diff = Math.abs((d2.getTime() - d1.getTime()) / msPerDay);
-      document.getElementById(numId).innerHTML = diff.toFixed(2);
-      document.getElementById(el_2).innerHTML = formatDuration(d1, time);
+
+      // 创建外层容器
+      const itemContainer = document.createElement('div');
+      itemContainer.className = 'countdown-item';
+
+      // 创建标题元素
+      const titleElement = document.createElement('div');
+      titleElement.className = 'item-title';
+      titleElement.innerHTML = `${event.desc}:<span class="time-num">${diff.toFixed(2)}</span>天`;
+
+      // 创建详细时间元素
+      const detailElement = document.createElement('div');
+      detailElement.className = 'item-title';
+      detailElement.innerHTML = formatDuration(d1, event.time);
+
+      // 组装元素
+      itemContainer.appendChild(titleElement);
+      itemContainer.appendChild(detailElement);
+
+      return itemContainer;
     }
 
-    // 获取当前时间 年月日时分秒
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    const hour = now.getHours();
-    const minute = now.getMinutes();
-    const second = now.getSeconds();
-    const formattedTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-    document.getElementById('curTime').innerHTML = formattedTime;
+    // 渲染所有倒计时项
+    function renderCountdownItems() {
+      const container = document.getElementById('countdown-container');
 
-    fillNum('2031-04-01T00:00:00', 'item_1', 'num_1', 'item_3');
-    fillNum('2026-02-17T00:00:00', 'item_5', 'num_5', 'item_6');// 春节
-    // https://daojishi.fun/  63岁 2055年5月底退休
-    fillNum('2055-06-01T00:00:00', 'item_7', 'days_7', 'time_7');// 退休
-    fillNum('2025-08-15T00:00:00', 'item_8', 'days_8', 'time_8');// 择仕合同倒计时
+      // 清空现有内容
+      container.innerHTML = '';
 
+      // 获取当前时间 年月日时分秒
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+      const formattedTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+
+      // 创建外层容器
+      const itemContainer = document.createElement('div');
+      itemContainer.className = 'countdown-item';
+
+      // 创建标题元素
+      const titleElement = document.createElement('div');
+      titleElement.className = 'item-title';
+      titleElement.innerHTML = `<span class="time-num">${formattedTime}</span>`;
+
+      itemContainer.appendChild(titleElement);
+      container.appendChild(itemContainer);
+
+      // 为每个事件创建并添加倒计时项
+      countdownEvents.forEach(event => {
+        const d1 = new Date();
+        const d2 = new Date(event.time);
+        if (d2 < d1) {
+          return;
+        }
+        const itemElement = createCountdownItem(event);
+        container.appendChild(itemElement);
+      });
+    }
+
+
+
+    // 初始渲染
+    renderCountdownItems();
   </script>
 </body>
 
