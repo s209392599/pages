@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+  <!-- 使用 http-equiv 设置 Cache-Control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <!-- 使用Pragma禁止页面缓存 -->
+  <meta http-equiv="Pragma" content="no-cache">
+  <!-- 设置缓存时间为0 -->
+  <meta http-equiv="Cache-Control" content="max-age=0">
+  <!-- 设置expires过期时间为过去的时间 -->
+  <meta http-equiv="expires" content="Wed, 21 Oct 2021 07:28:00 GMT">
+  <title>倒计时</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #countdown-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      min-height: 100vh;
+      overflow: auto;
+    }
+
+    .item-title {
+      margin: 5px auto;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .time-num {
+      color: #cd3285;
+    }
+
+    .countdown-item {
+      width: 90%;
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="countdown-container"></div>
+
+  <script>
+    // 定义倒计时事件数据
+    const countdownEvents = [
+      { time: '2050/03/01 00:00:00', desc: '退休' },
+    ];
+
+    function convertMilliseconds(time1, time2) {
+      // 将时间字符串转换为Date对象
+      const date1 = new Date(time1);
+      const date2 = new Date(time2);
+
+      // 计算时间差（毫秒）
+      const timeDifference = Math.abs(date2.getTime() - date1.getTime());
+
+      // 将时间差转换为年、月、天、小时、分钟和秒
+      const years = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 365.25));
+      const months = Math.floor((timeDifference % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.4375));
+      const days = Math.floor((timeDifference % (1000 * 60 * 60 * 24 * 30.4375)) / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+      // 返回结果
+      return {
+        years: years,
+        months: months,
+        days: days,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+      };
+    }
+
+    function formatDuration(a, b) {
+      const time = convertMilliseconds(a, b);
+
+      let duration = '';
+      if (time.years > 0) {
+        duration += time.years + '年';
+      }
+      if (time.months > 0) {
+        duration += time.months + '月';
+      }
+      if (time.days > 0) {
+        duration += time.days + '天';
+      }
+      if (time.hours > 0) {
+        duration += time.hours + '小时';
+      }
+      if (time.minutes > 0) {
+        duration += time.minutes + '分';
+      }
+      return duration;
+    }
+
+    // 动态创建倒计时项的函数
+    function createCountdownItem(event) {
+      const d1 = new Date();
+      const d2 = new Date(event.time);
+
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const diff = Math.abs((d2.getTime() - d1.getTime()) / msPerDay);
+
+      // 创建外层容器
+      const itemContainer = document.createElement('div');
+      itemContainer.className = 'countdown-item';
+
+      // 创建标题元素
+      const titleElement = document.createElement('div');
+      titleElement.className = 'item-title';
+      titleElement.innerHTML = `${event.desc}:<span class="time-num">${diff.toFixed(2)}</span>天`;
+
+      // 创建详细时间元素
+      const detailElement = document.createElement('div');
+      detailElement.className = 'item-title';
+      detailElement.innerHTML = formatDuration(d1, event.time);
+
+      // 组装元素
+      itemContainer.appendChild(titleElement);
+      itemContainer.appendChild(detailElement);
+
+      return itemContainer;
+    }
+
+    // 渲染所有倒计时项
+    function renderCountdownItems() {
+      const container = document.getElementById('countdown-container');
+
+      // 清空现有内容
+      container.innerHTML = '';
+
+      // 获取当前时间 年月日时分秒
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+      const formattedTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+
+      // 创建外层容器
+      const itemContainer = document.createElement('div');
+      itemContainer.className = 'countdown-item';
+
+      // 创建标题元素
+      const titleElement = document.createElement('div');
+      titleElement.className = 'item-title';
+      titleElement.innerHTML = `<span class="time-num">${formattedTime}</span>`;
+
+      itemContainer.appendChild(titleElement);
+      container.appendChild(itemContainer);
+
+      // 为每个事件创建并添加倒计时项
+      countdownEvents.forEach(event => {
+        const d1 = new Date();
+        const d2 = new Date(event.time);
+        if (d2 < d1) {
+          return;
+        }
+        const itemElement = createCountdownItem(event);
+        container.appendChild(itemElement);
+      });
+    }
+
+
+
+    // 初始渲染
+    renderCountdownItems();
+  </script>
+</body>
+
+</html>
